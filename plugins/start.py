@@ -120,18 +120,23 @@ async def start_command(client: Client, message: Message):
                     pass
 
         elif verify_status['is_verified']:
-            reply_markup = InlineKeyboardMarkup(
-            [          
+            reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton( "Main Channel", url = "t.me/InkaLinks" ),
-                    InlineKeyboardButton("Source Code", url = "https://t.me/+nrNgQ7sT3XQxZTc1")
-                ],
+                    [ InlineKeyboardButton(text="🏖️", callback_data="about"),
+                    InlineKeyboardButton(text="🍂", callback_data="about"),
+                    InlineKeyboardButton(text="⚠️", callback_data="me"),
+                    InlineKeyboardButton(text="💸", callback_data="about"),
+                    InlineKeyboardButton(text="🎭", callback_data="about"),
+                ],[ InlineKeyboardButton( "ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", callback_data = "main" ),
+                    InlineKeyboardButton("sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ ", callback_data = "source")
+                ], [ InlineKeyboardButton("ᴡᴀᴛᴄʜ sʜᴏʀᴛs ᴠɪᴅᴇᴏs", url = "http://t.me/UnseenRobot/shorts") ],
                 [
-                    InlineKeyboardButton("🤖 About Me", callback_data = "about"),
-                    InlineKeyboardButton("🔒 Close", callback_data = "close")
+                    InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data = "about"),
+                    InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data = "close")
                 ]
             ]
             )
+        )
             await message.reply_text(
                 text=START_MSG.format(
                     first=message.from_user.first_name,
