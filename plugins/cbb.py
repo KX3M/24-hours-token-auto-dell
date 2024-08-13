@@ -88,7 +88,7 @@ async def cb_handler(client: Bot, query: CallbackQuery):
                 reply_markup = InlineKeyboardMarkup(
                     [
                         [  InlineKeyboardButton("ᴅᴇᴠʟᴏᴘᴇʀ",url= "t.me/HateXfree"),
-                         InlineKeyboardButton("ᴀᴅᴍɪɴ",url = "t.me/CallAdminsRobot")],
+                         InlineKeyboardButton("ᴀᴅᴍɪɴ",url = f'tg://user?id={OWNER_ID}')],
                         [ InlineKeyboardButton("ʜᴏᴍᴇ", callback_data = "start"),
                          InlineKeyboardButton( "ᴄʟᴏsᴇ", callback_data = "close")]
                     ]
