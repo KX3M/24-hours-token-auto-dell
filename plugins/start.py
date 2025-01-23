@@ -32,6 +32,13 @@ from helper_func import subscribed, encode, decode, get_messages, get_shortlink,
 from database.database import add_user, del_user, full_userbase, present_user
 from shortzy import Shortzy
 
+
+# add time im seconds for waitingwaiting before delete 
+# 1 minutes = 60, 2 minutes = 60×2=120, 5 minutes = 60×5=300
+SECONDS = int(os.getenv("SECONDS", "600"))
+
+
+
 @Bot.on_message(filters.command('start') & filters.private & subscribed)
 async def start_command(client: Client, message: Message):
     id = message.from_user.id
@@ -99,25 +106,33 @@ async def start_command(client: Client, message: Message):
                 return
             await temp_msg.delete()
 
-            for msg in messages:
-                if bool(CUSTOM_CAPTION) & bool(msg.document):
-                    caption = CUSTOM_CAPTION.format(previouscaption="" if not msg.caption else msg.caption.html, filename=msg.document.file_name)
-                else:
-                    caption = "" if not msg.caption else msg.caption.html
+            
+        for msg in messages:
 
-                if DISABLE_CHANNEL_BUTTON:
-                    reply_markup = msg.reply_markup
-                else:
-                    reply_markup = None
+            if bool(CUSTOM_CAPTION) & bool(msg.document):
+                caption = CUSTOM_CAPTION.format(previouscaption = "" if not msg.caption else msg.caption.html, filename = msg.document.file_name)
+            else:
+                caption = "" if not msg.caption else msg.caption.html
 
-                try:
-                    await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                    await asyncio.sleep(0.5)
-                except FloodWait as e:
-                    await asyncio.sleep(e.x)
-                    await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                except:
-                    pass
+            if DISABLE_CHANNEL_BUTTON:
+                reply_markup = msg.reply_markup
+            else:
+                reply_markup = None
+
+            try:
+                f = await msg.copy(chat_id=message.from_user.id, caption = caption, parse_mode = ParseMode.HTML, reply_markup = reply_markup, protect_content=PROTECT_CONTENT)
+
+            except FloodWait as e:
+                await asyncio.sleep(e.x)
+                f = await msg.copy(chat_id=message.from_user.id, caption = caption, parse_mode = ParseMode.HTML, reply_markup = reply_markup, protect_content=PROTECT_CONTENT)
+
+            except:
+                pass
+        k = await client.send_message(chat_id = message.from_user.id, text=f"<b><blockquote>❗️ <u>IMPORTANT</u> ❗️</blockquote>\n\nThis video / file will be deleted in 20 minutes (Due to copyright issues).\n\n📌 Please forward this video / file to somewhere else and start downloading there.</b>")
+        await asyncio.sleep(SECONDS)
+        await f.delete()
+        await k.edit_text("Your video / file is successfully deleted !")
+
 
         elif verify_status['is_verified']:
             reply_markup=InlineKeyboardMarkup(
